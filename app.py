@@ -71,6 +71,9 @@ def confirm_payment_pix():
 def payment_pix_pagamento(payment_id):
     payment = Payment.query.get(payment_id)
 
+    if not payment:
+        return render_template("404.html")
+
     if payment.paid:
         return render_template(
             "confirmed_payment.html", payment_id=payment.id, value=payment.value
@@ -88,6 +91,11 @@ def payment_pix_pagamento(payment_id):
 @socketio.on("connect")
 def handle_connect():
     print("Client connected to the server")
+
+
+@socketio.on("disconnect")
+def handle_disconnect():
+    print("Client disconnected to the server")
 
 
 if __name__ == "__main__":
