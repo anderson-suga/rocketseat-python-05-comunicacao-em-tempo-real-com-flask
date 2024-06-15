@@ -1,7 +1,9 @@
-from flask import Flask, jsonify, request
+import os
+from flask import Flask, jsonify, request, send_file
 from repository.database import db
 from models.payment import Payment
 from datetime import datetime, timedelta
+from payments.pix import Pix
 
 app = Flask(__name__)
 
@@ -22,12 +24,23 @@ def create_payment_pix():
 
     new_payment = Payment(value=data["value"], expiration_date=expiration_date)
 
+    pix_obj = Pix()
+    data_payment_pix = pix_obj.create_payment()
+
+    new_payment.bank_payment_id = data_payment_pix["bank_payment_id"]
+    new_payment.qr_code = data_payment_pix["qr_code_path"]
+
     db.session.add(new_payment)
     db.session.commit()
 
     return jsonify(
         {"message": "Payment created with success!", "payment": new_payment.to_dict()}
     )
+
+
+@app.route("/payments/pix/qr_code/<file_name>", methods=["GET"])
+def get_image(file_name):
+    return send_file(f"static/img/{file_name}.png", mimetype="image/png")
 
 
 @app.route("/payments/pix/confirmation", methods=["POST"])
@@ -41,4 +54,9 @@ def payment_pix_pagamento(payment_id):
 
 
 if __name__ == "__main__":
+    # Create folder to save images if not exists
+    path_img = "./static/img/"
+    if not os.path.exists(path_img):
+        os.makedirs(path_img)
+
     app.run(debug=True)
