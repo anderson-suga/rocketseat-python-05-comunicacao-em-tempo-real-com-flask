@@ -4,6 +4,7 @@ from repository.database import db
 from models.payment import Payment
 from datetime import datetime, timedelta
 from payments.pix import Pix
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 
@@ -11,6 +12,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SECRET_KEY"] = "SECRETE_KEY_WEBSOCKET"
 
 db.init_app(app)
+socketio = SocketIO(app)
 
 
 @app.route("/payments/pix", methods=["POST"])
@@ -60,10 +62,15 @@ def payment_pix_pagamento(payment_id):
     )
 
 
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected to the server")
+
+
 if __name__ == "__main__":
     # Create folder to save images if not exists
     path_img = "./static/img/"
     if not os.path.exists(path_img):
         os.makedirs(path_img)
 
-    app.run(debug=True)
+    socketio.run(app, debug=True)
