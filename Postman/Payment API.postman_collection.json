@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "510e5f5e-e7ff-4420-abe0-452e3a80f269",
+		"name": "Payment API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5321480"
+	},
+	"item": [
+		{
+			"name": "Create Payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"value\": 700\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/payments/pix",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"payments",
+						"pix"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get QR Code image",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/payments/pix/qr_code/qr_code_payment_4a040b58-622b-4a01-89af-27d5a1e6d244",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"payments",
+						"pix",
+						"qr_code",
+						"qr_code_payment_4a040b58-622b-4a01-89af-27d5a1e6d244"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pix - Confirm payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bank_payment_id\": \"fab25995-9296-4505-9131-b770b928d40f\",\n    \"value\": 700\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/payments/pix/confirmation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"payments",
+						"pix",
+						"confirmation"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
