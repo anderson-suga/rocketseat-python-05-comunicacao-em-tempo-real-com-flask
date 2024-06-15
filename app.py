@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, render_template
 from repository.database import db
 from models.payment import Payment
 from datetime import datetime, timedelta
@@ -50,7 +50,7 @@ def confirm_payment_pix():
 
 @app.route("/payments/pix/<int:payment_id>", methods=["GET"])
 def payment_pix_pagamento(payment_id):
-    return "pagamento pix"
+    return render_template("payment.html")
 
 
 if __name__ == "__main__":
